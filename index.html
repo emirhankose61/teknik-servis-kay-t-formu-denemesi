@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Teknik Servis - Kayıt Formu</title>
+    <style>
+        :root {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #222;
+            --bg-light: #f4f6f8;
+            --bg-dark: #121212;
+            --card-light: #fff;
+            --card-dark: #1e1e1e;
+            --text-light: #222;
+            --text-dark: #f1f1f1;
+            --border-light: #d6dbe0;
+            --border-dark: #333;
+            --accent: #0b74ff;
+        }
+
+        body {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 28px;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 820px;
+            background: var(--card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(20, 30, 40, 0.08);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark .card {
+            background: var(--card-dark);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        p.lead {
+            margin: 0 0 18px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        body.dark p.lead {
+            color: #ccc;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: inherit;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #fff;
+            color: #000;
+            transition: all 0.3s;
+        }
+
+        body.dark input,
+        body.dark select,
+        body.dark textarea {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid var(--border-dark);
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button.secondary {
+            background: #e6eefc;
+            color: #0b59c6;
+        }
+
+        body.dark button.secondary {
+            background: #2e3b55;
+            color: #9fc0ff;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .records {
+            margin-top: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #eef2f6;
+            text-align: left;
+        }
+
+        body.dark th,
+        body.dark td {
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #fbfdff;
+            font-weight: 700;
+        }
+
+        body.dark th {
+            background: #1a1a1a;
+            color: #ddd;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        body.dark .meta {
+            color: #aaa;
+        }
+
+        .empty {
+            padding: 16px;
+            background: #fff9e8;
+            border: 1px solid #ffedd5;
+            border-radius: 8px;
+            color: #7a5b00;
+        }
+
+        body.dark .empty {
+            background: #2b2b1f;
+            border-color: #5a4c28;
+            color: #e1cf8a;
+        }
+
+        @media (max-width: 720px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 🌙 Tema butonu */
+        #themeToggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--accent);
+            transition: 0.3s;
+        }
+
+        #themeToggle:hover {
+            background: var(--accent);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="themeToggle">🌙 Dark Mode</button>
+
+    <div class="card" role="main">
+        <h1>Teknik Servis Kayıt Formu</h1>
+        <p class="lead"></p>
+
+        <form id="servisForm" autocomplete="off">
+            <div>
+                <label for="adsoyad">Ad Soyad *</label>
+                <input id="adsoyad" name="adsoyad" type="text" placeholder="Adınız Soyadınız" required maxlength="80">
+            </div>
+
+            <div>
+                <label for="telefon">Telefon *</label>
+                <input id="telefon" name="telefon" type="tel" placeholder="+90 5xx xxx xx xx" required
+                    pattern="^\+?\d{10,15}$" title="Başında + yoksa ülke kodu olmadan en az 10 rakam yazın">
+            </div>
+
+            <div>
+                <label for="cihaz">Cihaz Türü *</label>
+                <select id="cihaz" name="cihaz" required>
+                    <option value="">Seçiniz...</option>
+                    <option>Telefon</option>
+                    <option>Bilgisayar / Laptop</option>
+                    <option>Tablet</option>
+                    <option>TV / Monitör</option>
+                    <option>Diğer</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="model">Model / Marka</label>
+                <input id="model" name="model" type="text" placeholder="Örn: Samsung A52 / Dell XPS 15">
+            </div>
+
+            <div>
+                <label for="serino">Seri No</label>
+                <input id="serino" name="serino" type="text" placeholder="Varsa seri numarası">
+            </div>
+
+            <div>
+                <label for="gelistarihi">Geliş Tarihi</label>
+                <input id="gelistarihi" name="gelistarihi" type="date" value="">
+            </div>
+
+            <div class="full">
+                <label for="sikayet">Arıza / Şikayet (kısa)</label>
+                <textarea id="sikayet" name="sikayet" placeholder="Sorunun kısa açıklaması..." required
+                    maxlength="800"></textarea>
+            </div>
+
+            <div class="full actions">
+                <button type="submit">Kaydet</button>
+                <button type="button" id="temizle" class="secondary">Formu Temizle</button>
+                <div style="margin-left:auto" class="meta">Kayıtlar tarayıcıda gösterilir (geçici).</div>
+            </div>
+        </form>
+
+        <div class="records">
+            <h2 style="font-size:15px;margin:12px 0 6px">Kayıtlar</h2>
+            <div id="recordsContainer">
+                <div class="empty">Henüz kayıt yok.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🌙 Tema geçişi
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const darkMode = document.body.classList.contains('dark');
+            themeBtn.textContent = darkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+
+        (function () {
+            const form = document.getElementById('servisForm');
+            const container = document.getElementById('recordsContainer');
+            const temizleBtn = document.getElementById('temizle');
+
+            const kayitlar = [];
+
+            function renderRecords() {
+                if (kayitlar.length === 0) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                let html = '<table><thead><tr><th>#</th><th>Ad Soyad</th><th>Telefon</th><th>Cihaz</th><th>Model</th><th>Geliş</th><th>Şikayet</th></tr></thead><tbody>';
+                kayitlar.forEach((k, i) => {
+                    html += `<tr>
+            <td>${i + 1}</td>
+            <td>${escapeHtml(k.adsoyad)}</td>
+            <td class="meta">${escapeHtml(k.telefon)}</td>
+            <td>${escapeHtml(k.cihaz)}</td>
+            <td>${escapeHtml(k.model)}</td>
+            <td>${escapeHtml(k.gelistarihi || '-')}</td>
+            <td>${escapeHtml(k.sikayet)}</td>
+          </tr>`;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str).replace(/[&<>"']/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]; });
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                const data = {
+                    adsoyad: form.adsoyad.value.trim(),
+                    telefon: form.telefon.value.trim(),
+                    cihaz: form.cihaz.value,
+                    model: form.model.value.trim(),
+                    serino: form.serino.value.trim(),
+                    gelistarihi: form.gelistarihi.value,
+                    sikayet: form.sikayet.value.trim()
+                };
+
+                kayitlar.unshift(data);
+                renderRecords();
+
+                const but = form.querySelector('button[type="submit"]');
+                but.textContent = 'Kaydedildi ✓';
+                setTimeout(() => but.textContent = 'Kaydet', 1100);
+
+                form.reset();
+            });
+
+            temizleBtn.addEventListener('click', function () {
+                form.reset();
+            });
+
+            renderRecords();
+        })();
+
+        // 📅 Geliş Tarihi alanını otomatik bugüne ayarla
+        const tarihInput = document.getElementById("gelistarihi");
+        const bugun = new Date();
+        const yil = bugun.getFullYear();
+        const ay = String(bugun.getMonth() + 1).padStart(2, "0");
+        const gun = String(bugun.getDate()).padStart(2, "0");
+        tarihInput.value = `${yil}-${ay}-${gun}`;
+    </script>
+</body>
+
+</html>
